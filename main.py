@@ -3,6 +3,8 @@ import site
 from tkinter import *
 from tkinter import font
 from tkinter import ttk
+from tkinter import messagebox
+from view import *
 
 ## Colors ##
 co1 = "#f0f3f5" # Black
@@ -38,6 +40,42 @@ frame_right.grid(row=0, column=1, rowspan=2, sticky=NSEW, padx=1, pady=0)
 app_name = Label(frame_top_left, text="Estoque de Ingredientes", anchor=NW, font=("Ivy 13 bold") , background=co2, fg=co1, relief='flat')
 app_name.place(x=50, y=11)
 
+# Function insert
+def insert():
+    nome_igrediente = ei_nome.get().strip().capitalize()
+    localizacao = ei_loc.get()
+    preco = ei_preco.get()
+    qtd = ei_qtd.get()
+
+    list = [nome_igrediente, localizacao, preco, qtd]
+
+    if nome_igrediente == "":
+        messagebox.showerror("Erro", "O nome não pode ser vazio!")
+    elif localizacao == "":
+        messagebox.showerror("Erro", "A localização não pode ser vazia!")
+    elif preco == "":
+        messagebox.showerror("Erro", "O preço não pode ser vazio!")
+    elif qtd == "":
+        messagebox.showerror("Erro", "A quantidade não pode estar vazia!")
+
+
+
+            
+    else:
+        create_info(list)
+        messagebox.showinfo("Sucesso", "Os dados foram inseridos com sucesso!")
+
+        ei_nome.delete(0, "end")
+        ei_loc.delete(0, "end")
+        ei_preco.delete(0, "end")
+        ei_qtd.delete(0, "end")
+
+    for widget in frame_right.winfo_children():
+        widget.destroy()
+
+    show()
+    
+
 # Building frame_bot_left
 # Nome do Ingrediente
 i_nome = Label(frame_bot_left, text="Nome do Ingrediente *", anchor=NW, font=("Ivy 10 bold") , background=co1, fg=co4, relief='flat')
@@ -64,7 +102,7 @@ ei_qtd = Entry(frame_bot_left, width=45, justify='left', relief='solid')
 ei_qtd.place(x=15, y=220)
 
 # Add Button
-b_inserir = Button(frame_bot_left, text="Inserir", width=10, font=("Ivy 9 bold") , background=co2, fg=co1, relief='raised', overrelief='ridge')
+b_inserir = Button(frame_bot_left, command=insert, text="Inserir", width=10, font=("Ivy 9 bold") , background=co2, fg=co1, relief='raised', overrelief='ridge')
 b_inserir.place(x=20, y=310)
 
 # Update Button
@@ -76,47 +114,46 @@ b_deletar = Button(frame_bot_left, text="Deletar", width=10, font=("Ivy 9 bold")
 b_deletar.place(x=200, y=310)
 
 # Creating Right Frame for Table
-lista = [
-    ['Água Oxigenada', 5587, 4.99, 1.000],
-    ['Gasóleo', 5777, 7.89, 1.000],
-    ['Conduinte Líquido', 5777, 100.29, 1.000],
-]
+def show():
+    lista = read_info()
 
-lista_header = ['Código', 'Nome do Ingrediente', 'Localização', 'Preço', 'Quantidade (mL)']
+    lista_header = ['Cód.', 'Nome do Ingrediente', 'Localização', 'Preço', 'Quantidade (mL)']
 
-tree = ttk.Treeview(frame_right, selectmode="extended", columns=lista_header, show="headings")
+    tree = ttk.Treeview(frame_right, selectmode="extended", columns=lista_header, show="headings")
 
-# Vertical Scrollbar
-vsb = ttk.Scrollbar(frame_right, orient="vertical", command=tree.yview)
+    # Vertical Scrollbar
+    vsb = ttk.Scrollbar(frame_right, orient="vertical", command=tree.yview)
 
-# Horizontal Scrollbar
-hsb = ttk.Scrollbar(frame_right, orient="horizontal", command=tree.xview)
+    # Horizontal Scrollbar
+    hsb = ttk.Scrollbar(frame_right, orient="horizontal", command=tree.xview)
 
-tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
+    tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
 
-tree.grid(column=0, row=0, sticky="nsew")
-vsb.grid(column=1, row=0, sticky="ns")
-hsb.grid(column=0, row=1, sticky="ew")
+    tree.grid(column=0, row=0, sticky="nsew")
+    vsb.grid(column=1, row=0, sticky="ns")
+    hsb.grid(column=0, row=1, sticky="ew")
 
-frame_right.grid_rowconfigure(0, weight=12)
+    frame_right.grid_rowconfigure(0, weight=12)
 
-# Headers align
-hd = ["center", "nw", "nw", "nw", "nw"]
-# Columns width
-h = [30, 170, 170, 170, 170]
-n = 0
+    # Headers align
+    hd = ["center", "center", "center", "center", "center"]
+    # Columns width
+    h = [40, 170, 170, 170, 170]
+    n = 0
 
-# Loop for show data rows
-for col in lista_header:
-    tree.heading(col, text=col.title(), anchor=CENTER)
-    # Adjust the col width to the header string
-    tree.column(col, width=h[n], anchor=hd[n])
+    # Loop for show data rows
+    for col in lista_header:
+        tree.heading(col, text=col.title(), anchor=CENTER)
+        # Adjust the col width to the header string
+        tree.column(col, width=h[n], anchor=hd[n])
 
-    n += 1
+        n += 1
 
-for item in lista:
-    tree.insert("", "end", values=item)
+    for item in lista:
+        tree.insert("", "end", values=item)
 
 
+# Call show function
+show()
 
 root.mainloop()
