@@ -28,14 +28,13 @@ def read_info():
     return datas
 
 
-
-# # list = ['Água', 1]
-# # # U - Update
-# with conn:
-#     # Create  cursor
-#     c = conn.cursor()
-#     query = "UPDATE INGREDIENTES SET NOME_INGREDIENTE=? WHERE CODIGO_INGREDIENTE=? "
-#     c.execute(query, list)
+# U - Update
+def update_info(i):
+    with conn:
+        # Create  cursor
+        c = conn.cursor()
+        query = "UPDATE INGREDIENTES SET NOME_INGREDIENTE=?, NUMERO_LOCALIZACAO=?, PRECO=?, QUANTIDADE=? WHERE CODIGO_INGREDIENTE=? "
+        c.execute(query, i)
 
 # # D - Delete
 # list = [1]

@@ -18,6 +18,9 @@ co7 = "#ef5350" # Red
 co8 = "#263238" # Light Blue
 co9 = "#e9edf5" # Sky Blue
 
+# Var tree global
+global tree
+
 # Create window
 root = Tk()
 root.title("BaronicRobotics - baronicrobotics.com"
@@ -56,11 +59,7 @@ def insert():
     elif preco == "":
         messagebox.showerror("Erro", "O preço não pode ser vazio!")
     elif qtd == "":
-        messagebox.showerror("Erro", "A quantidade não pode estar vazia!")
-
-
-
-            
+        messagebox.showerror("Erro", "A quantidade não pode estar vazia!")         
     else:
         create_info(list)
         messagebox.showinfo("Sucesso", "Os dados foram inseridos com sucesso!")
@@ -75,6 +74,65 @@ def insert():
 
     show()
     
+# Function update    
+def update():
+    try:
+        treev_data = tree.focus()
+        treev_dic = tree.item(treev_data)
+        tree_list = treev_dic['values']
+
+        cod_ing= tree_list[0]
+
+        ei_nome.delete(0, "end")
+        ei_loc.delete(0, "end")
+        ei_preco.delete(0, "end")
+        ei_qtd.delete(0, "end")
+
+        ei_nome.insert(0, tree_list[1])
+        ei_loc.insert(0, tree_list[2])
+        ei_preco.insert(0, tree_list[3])
+        ei_qtd.insert(0, tree_list[4])
+
+        # Function insert
+        def update_confirm():
+            nome_igrediente = ei_nome.get().strip().capitalize()
+            localizacao = ei_loc.get()
+            preco = ei_preco.get()
+            qtd = ei_qtd.get()
+
+            list = [nome_igrediente, localizacao, preco, qtd, cod_ing]
+
+            if nome_igrediente == "":
+                messagebox.showerror("Erro", "O nome não pode ser vazio!")
+            elif localizacao == "":
+                messagebox.showerror("Erro", "A localização não pode ser vazia!")
+            elif preco == "":
+                messagebox.showerror("Erro", "O preço não pode ser vazio!")
+            elif qtd == "":
+                messagebox.showerror("Erro", "A quantidade não pode estar vazia!")
+      
+            else:
+                update_info(list)
+                messagebox.showinfo("Sucesso", "Os dados foram atualizados com sucesso!")
+
+                ei_nome.delete(0, "end")
+                ei_loc.delete(0, "end")
+                ei_preco.delete(0, "end")
+                ei_qtd.delete(0, "end")
+
+            for widget in frame_right.winfo_children():
+                widget.destroy()
+
+                show()
+
+        # Confirm Button
+        b_confirm = Button(frame_bot_left, command=update_confirm, text="Confirmar", width=10, font=("Ivy 7 bold") , background=co6, fg=co1, relief='raised', overrelief='ridge')
+        b_confirm.place(x=115, y=350)
+
+    except IndexError:
+        messagebox.showerror("Erro", "Selecione alguma linha da tabela")
+
+
 
 # Building frame_bot_left
 # Nome do Ingrediente
@@ -106,7 +164,7 @@ b_inserir = Button(frame_bot_left, command=insert, text="Inserir", width=10, fon
 b_inserir.place(x=20, y=310)
 
 # Update Button
-b_atualizar = Button(frame_bot_left, text="Atualizar", width=10, font=("Ivy 9 bold") , background=co6, fg=co1, relief='raised', overrelief='ridge')
+b_atualizar = Button(frame_bot_left, command=update, text="Atualizar", width=10, font=("Ivy 9 bold") , background=co6, fg=co1, relief='raised', overrelief='ridge')
 b_atualizar.place(x=110, y=310)
 
 # Delete Button
@@ -115,6 +173,9 @@ b_deletar.place(x=200, y=310)
 
 # Creating Right Frame for Table
 def show():
+
+    global tree
+
     lista = read_info()
 
     lista_header = ['Cód.', 'Nome do Ingrediente', 'Localização', 'Preço', 'Quantidade (mL)']
