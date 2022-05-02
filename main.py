@@ -201,7 +201,7 @@ def show():
 
     lista = read_info()
 
-    lista_header = ['Cód.', 'Nome do Ingrediente', 'Localização', 'Preço', 'Quantidade (mL)']
+    lista_header = ['Cód.', 'Nome do Ingrediente', 'Localização', 'Preço (€)', 'Quantidade (mL)']
 
     tree = ttk.Treeview(frame_right, selectmode="extended", columns=lista_header, show="headings")
 
