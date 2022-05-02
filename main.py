@@ -93,7 +93,7 @@ def update():
         ei_preco.insert(0, tree_list[3])
         ei_qtd.insert(0, tree_list[4])
 
-        # Function insert
+        # Function update_confirm
         def update_confirm():
             nome_igrediente = ei_nome.get().strip().capitalize()
             localizacao = ei_loc.get()
@@ -113,12 +113,14 @@ def update():
       
             else:
                 update_info(list)
-                messagebox.showinfo("Sucesso", "Os dados foram atualizados com sucesso!")
 
                 ei_nome.delete(0, "end")
                 ei_loc.delete(0, "end")
                 ei_preco.delete(0, "end")
                 ei_qtd.delete(0, "end")
+                b_confirm.destroy()
+
+                messagebox.showinfo("Sucesso", "Os dados foram atualizados com sucesso!")
 
             for widget in frame_right.winfo_children():
                 widget.destroy()
@@ -127,10 +129,31 @@ def update():
 
         # Confirm Button
         b_confirm = Button(frame_bot_left, command=update_confirm, text="Confirmar", width=10, font=("Ivy 7 bold") , background=co6, fg=co1, relief='raised', overrelief='ridge')
-        b_confirm.place(x=115, y=350)
+        b_confirm.place(x=115, y=350)        
 
     except IndexError:
         messagebox.showerror("Erro", "Selecione alguma linha da tabela")
+    
+# Function delete
+def delete():
+    try:
+        treev_data = tree.focus()
+        treev_dic = tree.item(treev_data)
+        tree_list = treev_dic['values']
+
+        cod_ing= [tree_list[0]]
+
+        delete_info(cod_ing)
+        messagebox.showinfo("Sucesso", "Os dados foram deletados com sucesso!")
+
+        for widget in frame_right.winfo_children():
+            widget.destroy()
+
+            show()
+
+    except IndexError:
+        messagebox.showerror("Erro", "Selecione alguma linha da tabela")
+
 
 
 
@@ -148,7 +171,7 @@ ei_loc = Entry(frame_bot_left, width=45, justify='left', relief='solid')
 ei_loc.place(x=15, y=100)
 
 # Preço
-i_preco = Label(frame_bot_left, text="Preço *", anchor=NW, font=("Ivy 10 bold") , background=co1, fg=co4, relief='flat')
+i_preco = Label(frame_bot_left, text="Preço (€) *", anchor=NW, font=("Ivy 10 bold") , background=co1, fg=co4, relief='flat')
 i_preco.place(x=10, y=130)
 ei_preco = Entry(frame_bot_left, width=45, justify='left', relief='solid')
 ei_preco.place(x=15, y=160)
@@ -168,7 +191,7 @@ b_atualizar = Button(frame_bot_left, command=update, text="Atualizar", width=10,
 b_atualizar.place(x=110, y=310)
 
 # Delete Button
-b_deletar = Button(frame_bot_left, text="Deletar", width=10, font=("Ivy 9 bold") , background=co7, fg=co1, relief='raised', overrelief='ridge')
+b_deletar = Button(frame_bot_left, text="Deletar", command=delete, width=10, font=("Ivy 9 bold") , background=co7, fg=co1, relief='raised', overrelief='ridge')
 b_deletar.place(x=200, y=310)
 
 # Creating Right Frame for Table

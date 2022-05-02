@@ -18,7 +18,7 @@ def read_info():
     with conn:
         # Create  cursor
         c = conn.cursor()
-        query = "SELECT * FROM INGREDIENTES"
+        query = "SELECT * FROM INGREDIENTES ORDER BY QUANTIDADE DESC"
         c.execute(query)
         data = c.fetchall()
         
@@ -36,10 +36,11 @@ def update_info(i):
         query = "UPDATE INGREDIENTES SET NOME_INGREDIENTE=?, NUMERO_LOCALIZACAO=?, PRECO=?, QUANTIDADE=? WHERE CODIGO_INGREDIENTE=? "
         c.execute(query, i)
 
-# # D - Delete
-# list = [1]
-# with conn:
-#     # Create  cursor
-#     c = conn.cursor()
-#     query = "DELETE FROM INGREDIENTES WHERE CODIGO_INGREDIENTE=?"
-#     c.execute(query, list)
+# D - Delete
+def delete_info(i):
+    list = [1]
+    with conn:
+        # Create  cursor
+        c = conn.cursor()
+        query = "DELETE FROM INGREDIENTES WHERE CODIGO_INGREDIENTE=?"
+        c.execute(query, i)
